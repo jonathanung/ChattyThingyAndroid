@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,18 @@ plugins {
 android {
     namespace = "com.example.chattythingyandroid"
     compileSdk = 34
+
+    // Read properties from local.properties
+    val localProperties = Properties().apply {
+        // Look in the root project directory instead of `app/`
+        val localPropsFile = rootProject.file("local.properties")
+        if (localPropsFile.exists()) {
+            localPropsFile.inputStream().use { load(it) }
+        }
+    }
+
+    // Get the API key, or set a default if not found
+    val openAiApiKey: String? = localProperties.getProperty("openAiApiKey")
 
     defaultConfig {
         applicationId = "com.example.chattythingyandroid"
@@ -19,6 +33,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "OPEN_AI_API_KEY", "\"${openAiApiKey}\"")
     }
 
     buildTypes {
@@ -38,6 +53,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -61,6 +77,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,5 +87,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("androidx.compose.material:material:1.4.0")
 
 }
