@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
     private val messages = mutableListOf<Message>()
     private lateinit var database: DatabaseReference
 
-    // TODO: Replace with a secure retrieval method. Do NOT hardcode your API key in production.
     private val openAiApiKey = BuildConfig.OPEN_AI_API_KEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +60,7 @@ class MainActivity : ComponentActivity() {
                 val message = snapshot.getValue(Message::class.java)
                 if (message != null) {
                     messages.add(message)
-                    // In a production app, you’d use a reactive state (e.g., MutableStateFlow)
+                    // In a production app, you'd use a reactive state (e.g., MutableStateFlow)
                     // to trigger recomposition of your Compose UI.
                 }
             }
